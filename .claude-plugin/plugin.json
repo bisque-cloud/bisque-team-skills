@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "bisque-team",
+  "displayName": "Bisque Team",
+  "description": "Manage your company's bisque.team membership from your agent: read the roster, invite people, remove and reinstate members, promote admins, and control which groups can open which presentations. Every change is checked against your administrator account server-side.",
+  "version": "1.0.0",
+  "author": { "name": "Bisque" },
+  "homepage": "https://bisque.team",
+  "keywords": ["team", "org", "members", "admin", "bisque"]
+}
