@@ -7,9 +7,12 @@ Thanks for wanting to make `/team` better.
   agent (Claude Code, Gemini CLI, Codex) and your OS. Never paste a roster,
   an invite link, or an API key into an issue — describe the shape of the
   problem instead.
-- **Found a security problem?** Email security@bisque.cloud rather than
-  opening an issue. This skill changes who can read a company's presentations,
-  so a report about it should not be public while it is unfixed.
+- **Found a security problem?** Use
+  [private vulnerability reporting](https://github.com/bisque-cloud/bisque-team-skills/security/advisories/new)
+  rather than opening an issue. This skill changes who can read a company's
+  presentations, so a report about it should not be public while it is unfixed.
+  The advisory goes straight to the maintainers and stays private until there
+  is a fix.
 - **Have a fix or improvement?** Open a pull request — small and focused beats
   large and sweeping. For anything substantial, an issue first saves you from
   building something we can't take.
