@@ -8,7 +8,8 @@ and it does it.
 bisque.team is the company layer around agent-made presentations: your team
 publishes into a shared library instead of a public channel, and groups decide
 who can open what. This skill manages the people side of that — the roster,
-invites, seats, and groups.
+invites, seats, and groups — and the company's documents and pages: who read
+them, and what a company page collected.
 
 For authoring and publishing presentations, install
 [`presenter`](https://github.com/bisque-cloud/presenter) instead. The two are
@@ -33,6 +34,19 @@ seat count your subscription bills.
 Administrators are a group rather than a role, so it grants Sam the `admins`
 group. The last remaining admin can't be demoted or removed — the server
 refuses, and your agent will tell you why instead of trying again.
+
+> Publish this expense policy for the engineering group.
+
+It publishes the document into your company library, visible to that group,
+wearing your company's branding.
+
+> Has everyone read the new policy?
+
+It reads who opened it, by name, and whether they read the latest version.
+
+> What did the offsite survey collect?
+
+It reads every answer the page collected and summarizes them.
 
 > Remove Dana and tell me what that costs us.
 

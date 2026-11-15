@@ -1,13 +1,14 @@
 ---
 name: team
-description: Manages your company's bisque.team membership — see the roster, invite people, remove them, and control which groups can open which presentations. Use when asked to invite or add someone to the team, company, or org, to list or manage members, to make someone an admin, to remove or reinstate a member, or to work with team groups or seats.
+description: Manages your company's bisque.team membership and library — see the roster, invite people, remove them, control which groups can open which presentations, documents and pages, publish a document or page to the company, and read who opened it or what a company page collected. Use when asked to invite or add someone to the team, company, or org, to list or manage members, to make someone an admin, to remove or reinstate a member, to work with team groups or seats, to publish a doc, policy or page to the company, to list the company library, or to ask who read a policy or what a survey collected.
 ---
 
 # Team
 
-bisque.team is the company layer: presentations published to a company
-library instead of a public channel, visible to the groups you decide. This
-skill manages who is in the company and what they can open.
+bisque.team is the company layer: presentations, documents (Markdown) and
+pages (HTML) published to a company library instead of a public channel,
+visible to the groups you decide. This skill manages who is in the company,
+what they can open, and what the company's documents and pages tell you.
 
 You reach it through the Bisque MCP server, so every call runs as the person
 whose credentials you hold. Only an administrator can change anything, and the
@@ -114,7 +115,66 @@ so a group is both "the marketing team" and "who can open the marketing
 briefing". `delete_org_group` is refused while any presentation still points
 at it (`GROUP_IN_USE`); the fix is to move those presentations, not to retry.
 
-## 4. Say what happened
+## 4. Company documents and pages
+
+A document or page can belong to the company the way a presentation does:
+the company owns it, so it stays when its author leaves, and a group decides
+who opens it. Every call below runs as the person whose credentials you hold;
+the server checks membership, the company's policy and the group each time.
+
+| Tool                      | What it does for the company                                                       |
+| ------------------------- | ---------------------------------------------------------------------------------- |
+| `create_artifact`         | With `organization_id` and `audience: "org"`, publishes into the company library   |
+| `list_artifacts`          | With `organization_id`, lists the company library: what that person can open there |
+| `share_artifact`          | With `group_id`, moves a company document or page to another group (admins)        |
+| `read_artifact_analytics` | Who opened it, by name, and for a document whether they read the latest version    |
+| `read_artifact_results`   | Every answer a company page collected, by name (the owner, or a company admin)     |
+
+**Publishing to the company.** "Publish this policy for the engineering
+group" is one call:
+
+```json
+{
+  "name": "create_artifact",
+  "arguments": {
+    "title": "Expense policy",
+    "type": "markdown",
+    "content": "# Expense policy\n…",
+    "organization_id": "acme",
+    "group_id": "engineering",
+    "audience": "org"
+  }
+}
+```
+
+Leave `group_id` out for the whole company. A company document or page is
+listed in the library by default. When an admin has switched off company
+documents and pages, the call is refused for everyone; report that rather
+than publishing it personally instead.
+
+**Branding comes with it.** The company's logo, colors and font appear
+around every company document and page; nothing to pass. A page can use the
+company's colors and font in its own CSS as `var(--brand-accent)`,
+`var(--brand-bg)`, `var(--brand-text)` and `var(--brand-font)`. Nothing is
+applied to a page's own design unless its HTML uses them; a Markdown
+document takes the company font on its own.
+
+**Who read it.** `read_artifact_analytics` answers "has everyone read the
+new policy?": each member who can open it, how often they opened it, and
+whether that was the latest version. Answer the question rather than listing
+everyone; the rows carry email addresses.
+
+**What a page collected.** `read_artifact_results` returns a survey's
+answers per person, or a page's saved entries with who wrote each. Summarize
+them ("9 of 12 answered; 7 prefer Lisbon"), and name people only when the
+user asks who. In the browser, the same results are under the title menu's
+**View results**, with a CSV download.
+
+**Presenting it.** The person who published a company document or page, or
+any admin, can choose **Present this** in its title menu on the web. The
+presentation goes into the same company library, for the same group.
+
+## 5. Say what happened
 
 Report the seat count after a membership change — it is what the company is
 billed for. After an invite, give the URL and the "nobody was emailed" caveat
@@ -133,6 +193,9 @@ in the same breath. After a promotion, say what the person can now do.
 - **A refusal is an answer.** `LAST_ADMIN`, `GROUP_IN_USE`, `NOT_A_MEMBER`
   and `RESERVED_GROUP` each mean the change was wrong, not that the call
   needs retrying with different arguments.
+- **Results and readers are people's data.** Answers and reader lists name
+  colleagues; report the totals the user asked for, and name someone only
+  when asked who.
 - **Reading the roster is not reporting it.** It carries every member's email
   address; answer the question the user asked instead of pasting the roster
   into the conversation.
